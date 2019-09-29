@@ -1,0 +1,30 @@
+service: all-times
+
+provider:
+  name: aws
+  runtime: python3.7
+  region: ap-northeast-1
+  stage: prod  
+
+functions:
+  main:
+    handler: handler.main
+    environment:
+      SLACK_TOKEN: ${file(./slack_secrets.yml):token}
+      SLACK_CHANNEL_ID: ${file(./slack_secrets.yml):channel_id}
+      SLACK_OAUTH_TOKEN: ${file(./slack_secrets.yml):oauth_token}
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+          response:
+            headers:
+              Content-Type: "'application/json'"
+            template: ${file(./response_template.json)}
+    timeout: 30
+
+package:
+  exclude:
+    - slack_secrets.yml
+    - response_template.json
