@@ -6,7 +6,14 @@ class SlackManager:
 		self.oauth_token = oauth_token
 		self.channel = channel
 
-	def post_message_slack(self, message, thread_ts=None):
+	def post_message_slack(self, message, username=None, icon_url=None, thread_ts=None):
+		"""
+		Args:
+			message,
+			username,
+			icon_url,
+			thread_ts
+		"""
 		method_url = "https://slack.com/api/chat.postMessage"
 
 		payload = {
@@ -17,8 +24,15 @@ class SlackManager:
 			"unfurl_media": True
 		}
 
+		if username and icon_url:
+			payload['as_user'] = False
+			payload['icon_url'] = icon_url
+			payload['username'] = username
+
 		if thread_ts:
 			payload['thread_ts'] = thread_ts
+
+		print('post_message_slack: ', payload)
 
 		response = requests.post(method_url, payload)
 		return response

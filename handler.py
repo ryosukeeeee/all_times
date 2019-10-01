@@ -71,14 +71,15 @@ def main(event, context):
         if ts != "":
             res = slack_manager.post_block_message(channel_name, event_message, user_icon_url, ts)
             print(res.text)
-            res = slack_manager.post_message_slack(event_message,ts)
+            res = slack_manager.post_message_slack(event_message, profile_display_name, user_icon_url, ts)
             print(res.text)
         # 初めてではなければ、リプライにする
         else:
             res = slack_manager.post_block_message(channel_name, event_message, user_icon_url)
             print(res.text)
             res_dict = json.loads(res.text)
-            res = slack_manager.post_message_slack(event_message, res_dict["ts"])
+            print(res_dict['ts'])
+            res = slack_manager.post_message_slack(event_message, profile_display_name, user_icon_url, res_dict["ts"])
             print(res.text)
 
         return {
