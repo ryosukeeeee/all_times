@@ -1,0 +1,35 @@
+theme : template
+
+theme-background : [ "#d6dbb6"]
+# h1, h2クラスの属性
+theme-headline   : [ "Raleway", "#484848", "none" ]
+# h3, h4, h5クラスの属性
+theme-byline     : [ "Raleway", "#484848", "none" ]
+# マークダウンの通常のテキストの属性
+theme-text       : [ "Ubuntu", "#484848", "none" ]
+# ハイパーリンクの色
+theme-links      : [ "#5289F7", "#5254F7" ]
+# コードブロックで使われるフォント
+theme-code       : [ "Source Code Pro" ]
+# ナビゲーションコントロールやメニューアイコン、プログレスバーの色
+theme-controls   : [ "#484848" ]
+# コンテンツブロックの垂直方向のマージン
+theme-margins    : [ "0", "15px" ]
+
+# コードハイライトのスタイル
+highlight : tomorrow
+
+# カスタムCSSのpath
+theme-override: assets/css/PITCHME.css
+
+# レイアウトのデフォルトを指定する
+# 例えばtop-leftにすれば、@snapで位置をしてしなければtop-leftに表示される
+layout : center
+
+# タイトルスライド以外に表示されるフッターの内容
+footnote : "published by <a href='https://twitter.com/ryosukeeeee_'>@ryosukeeeee_</a> on Oct 7, 2019"
+
+# 開発中はfalseにするとスライドをブラウザでみるときにデベロップメントメニューが使えるようになる（はずだが動かない）
+# 完成して公開するときはtrueにする
+# プライベートリポジトリでも、Security Published Modeで公開できるらしい（要検証）
+published : true
