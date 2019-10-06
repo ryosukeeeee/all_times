@@ -1,3 +1,4 @@
+@title[表紙]
 # Slackアプリ All Timesについて
 
 @snap[south text-center text-08]
@@ -5,6 +6,8 @@ Ryosuke Nakagawa
 @snapend
 
 ---
+@title[きっかけ]
+
 @snap[north span-40]
 ### きっかけ
 @snapend
@@ -15,17 +18,17 @@ Ryosuke Nakagawa
 @snapend
 
 ---
-@title[Slackスクリーンショット]
+@title[Slackホーム画面（平和）]
 
 @img[span-80 position_center](assets/img/slack_home_normal.png)
 
 +++
-@title[Slackスクリーンショット]
+@title[Slackホーム画面（カオス）]
 
 @img[span-80 position_center](assets/img/slack_home_fruid.png)
 
 +++
-@title[Slackスクリーンショット]
+@title[Slackホーム画面（カオス）フォーカス]
 
 @img[span-80 position_center](assets/img/slack_home_fruid_rect.png)
 
@@ -37,7 +40,6 @@ Ryosuke Nakagawa
 🤯
 @snapend
 
-<!-- 6枚目 -->
 ---?color=white
 @title[ディストラクタ]
 
@@ -68,14 +70,13 @@ cited from [集中力の高め方を心理学者が伝授「ディストラク�
 @ulend
 @snapend
 
-<!-- 7枚目 -->
 ---
+@title[thinking face]
 
 @snap[center text-center text-40]
 🤔
 @snapend
 
-<!-- 8枚目 -->
 ---?color=white
 @title[All Timesの紹介]
 
@@ -83,65 +84,68 @@ cited from [集中力の高め方を心理学者が伝授「ディストラク�
 ![ICON](assets/img/all_times_icon.png)
 @snapend
 
-<!-- 9枚目 -->
+@snap[south span-100 text-06]
+@fa[github]<a href='https://github.com/ryosukeeeee/all_times'>@ryosukeeeee/all_times</a>
+@snapend
+
 ---
+@title[DEMO]
 
 @snap[center text-center text-30]
 DEMO
 @snapend
 
-<!-- 9枚目 -->
 ---
-@title[アーキテクチャ]
+@title[アーキテクチャ-0]
 
 @snap[center text-center span-100 position_center]
 ![FLOW](assets/img/all_times_usecase.png)
 @snapend
 
-<!-- 10枚目 -->
 +++
+@title[アーキテクチャ-1]
 
 @snap[center text-center span-100]
 ![FLOW](assets/img/all_times_usecase-1.png)
 @snapend
 
-<!-- 11枚目 -->
 +++
+@title[アーキテクチャ-2]
 
 @snap[center text-center span-100]
 ![FLOW](assets/img/all_times_usecase-2.png)
 @snapend
 
-<!-- 7-3 -->
 +++
+@title[アーキテクチャ-3]
 
 @snap[center text-center span-100]
 ![FLOW](assets/img/all_times_usecase-3.png)
 @snapend
 
-<!-- 7-4 -->
 +++
+@title[アーキテクチャ-4]
 
 @snap[center text-center span-100]
 ![FLOW](assets/img/all_times_usecase-4.png)
 @snapend
 
-<!-- 7-5 -->
 +++
+@title[アーキテクチャ-5]
 
 @snap[center text-center span-100]
 ![FLOW](assets/img/all_times_usecase-5.png)
 @snapend
 
-<!-- 7-6 -->
 +++
+@title[アーキテクチャ-6]
 
 @snap[center text-center span-100]
 ![FLOW](assets/img/all_times_usecase-6.png)
 @snapend
 
 ---
-@title[event]
+@title[Event API]
 
 @snap[north span-100 text-09]
 イベントが発生したときに
@@ -183,7 +187,6 @@ DEMO
 ### eventHandlerのお仕事
 @snapend
 
-
 @snap[west span-100]
 @ul[list-spaced-bullets text-08]
 - チャンネルIDからチャンネル名（ex. times_bengal_cat）を取得
@@ -195,7 +198,6 @@ DEMO
 @snapend
 
 ---
-
 @title[feature work]
 
 @snap[north span-100]
@@ -209,9 +211,8 @@ DEMO
 @ulend
 @snapend
 
-
-<!-- 最後のスライド -->
 ---
+@title[Conclusion]
 
 @snap[center text-18]
 Have a good slack life @fa[slack]
