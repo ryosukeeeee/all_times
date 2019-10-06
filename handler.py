@@ -1,12 +1,12 @@
 import json
 import os
+import codecs
 import pprint
 import datetime as dt
 from SlackManager import *
 import Common
 
 def main(event, context):
-    # tokenのチェックをする
 
     token = os.environ['SLACK_TOKEN']
     oauth_token = os.environ['SLACK_OAUTH_TOKEN']
@@ -19,7 +19,7 @@ def main(event, context):
     )
 
     try: 
-        body = json.loads(event['body'])
+        body = event
         print("event")
         print(body)
 
@@ -34,7 +34,13 @@ def main(event, context):
             event_message = body['event']['text']
         else:
             event_message = "null"
+        if "subtype" in body['event'].keys():
+            print("subtype: ", body['event']['subtype'])
+
+        print(type(event_message))
         print("event_message: ", event_message)
+        # event_message = event_message.encode().decode('unicode-escape')
+        # print("event_message: ", event_message)
             
         # チャンネル名を取得
         channel_info = slack_manager.get_channel_info(event_channel_id)
@@ -68,17 +74,16 @@ def main(event, context):
         ts = slack_manager.is_posted_channel(json.loads(res.text), channel_name)
 
         # もし初めてのイベントなら#{チャンネル名}を最初に投稿する
-        if ts != "":
-            res = slack_manager.post_block_message(channel_name, event_message, user_icon_url, ts)
-            print(res.text)
-            res = slack_manager.post_message_slack(event_message,ts)
-            print(res.text)
-        # 初めてではなければ、リプライにする
-        else:
+        if ts == "":
             res = slack_manager.post_block_message(channel_name, event_message, user_icon_url)
             print(res.text)
             res_dict = json.loads(res.text)
-            res = slack_manager.post_message_slack(event_message, res_dict["ts"])
+            ts = res_dict['ts']
+            res = slack_manager.post_message_slack(event_message, profile_display_name, user_icon_url, ts)
+            print(res.text)
+        # 初めてではなければ、リプライにする
+        else:
+            res = slack_manager.post_message_slack(event_message, profile_display_name, user_icon_url, ts)
             print(res.text)
 
         return {
@@ -96,21 +101,3 @@ def main(event, context):
             'body': "ok",
             'isBase64Encoded': False
         }
-
-# url登録時のバリデーション用
-def validation(event):
-
-    request_body = json.loadcs(event['body'])
-    # challenge = body["challenge"]
-    # print(challenge)
-
-    body = {
-        "challenge": request_body['challenge'],
-    }
-
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(body)
-    }
-
-    return response

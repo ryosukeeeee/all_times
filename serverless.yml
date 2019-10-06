@@ -1,18 +1,52 @@
 service: all-times
 
+frameworkVersion: '>=1.0.0 <2.0.0'
+
 provider:
   name: aws
   runtime: python3.7
   region: ap-northeast-1
-  stage: prod  
+  stage: ${opt:stage, 'stg'}
+
+package:
+  individually: true
+  exclude:
+    - slack_secrets.yml
+    - response_template.json
+    - README.md
 
 functions:
-  main:
-    handler: handler.main
+  slackRequestHandler:
+    handler: slackRequestHandler.main
     environment:
-      SLACK_TOKEN: ${file(./slack_secrets.yml):token}
-      SLACK_CHANNEL_ID: ${file(./slack_secrets.yml):channel_id}
-      SLACK_OAUTH_TOKEN: ${file(./slack_secrets.yml):oauth_token}
+      SLACK_VERIFICATION_TOKEN: ${file(./slack_secrets.yml):verification_token}
+      SLACK_APP_ID: ${file(./slack_secrets.yml):app_id}
+      MAIN_FUNCTION_ARN:         
+        Fn::Join:
+        - ':'
+        - - 'arn:aws:lambda'
+          - Ref: 'AWS::Region'
+          - Ref: 'AWS::AccountId'
+          - 'function'
+          - 'all-times-${self:provider.stage}-main'
+    package:
+      exclude:
+        - handler.py
+        - Common.py
+        - SlackManager.py
+        - bin/**
+        - bin*/**
+        - certifi/**
+        - certifi*/**
+        - chardet/**
+        - chardet*/**
+        - idna/**
+        - idna*/**
+        - requests/**
+        - requests*/**
+        - urllib3/**
+        - urllib3*/**
+    role: myCustRole1
     events:
       - http:
           path: /
@@ -22,9 +56,90 @@ functions:
             headers:
               Content-Type: "'application/json'"
             template: ${file(./response_template.json)}
-    timeout: 30
+  main:
+    handler: handler.main
+    environment:
+      SLACK_TOKEN: ${file(./slack_secrets.yml):token}
+      SLACK_CHANNEL_ID: ${file(./slack_secrets.yml):channel_id}
+      SLACK_OAUTH_TOKEN: ${file(./slack_secrets.yml):oauth_token}
+    timeout: 60
+    role: myCustRole2
+    package:
+      exclude:
+        - slackRequestHandler.py
 
-package:
-  exclude:
-    - slack_secrets.yml
-    - response_template.json
+resources:
+  Resources:
+    myCustRole1:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /my/cust/path/
+        RoleName: MyCustRole1
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: myPolicyName
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow # note that these rights are given in the default policy and are required if you want logs out of your lambda(s)
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: 'Allow'
+                  Action:
+                    - 'lambda:InvokeFunction'
+                  Resource:
+                    Fn::Join:
+                      - ':'
+                      - - 'arn:aws:lambda'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'function'
+                        - 'all-times-${self:provider.stage}-main'
+    myCustRole2:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /my/cust/path/
+        RoleName: MyCustRole2
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: myPolicyName
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow # note that these rights are given in the default policy and are required if you want logs out of your lambda(s)
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
