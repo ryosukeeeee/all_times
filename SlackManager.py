@@ -37,52 +37,19 @@ class SlackManager:
 		response = requests.post(method_url, payload)
 		return response
 
-	def post_block_message(self, channel_name, message, user_icon_url, thread_ts=None):
+	def post_block_message(self, channel_name, message, user_icon_url):
 		method_url = "https://slack.com/api/chat.postMessage"
 
-		# thread_tsがあったらsectionはなし
-		block = ""
-		if not thread_ts:
-			block = block + """[
+		block = """[
 							{
 									"type": "section",
 									"text": {
 											"type": "mrkdwn","""
-			block = block + '"text": "*#{0}*"'.format(channel_name)
-			block = block + """
-									}
-							},
-							{
-									"type": "divider"
-							},
-							{
-									"type": "context",
-									"elements": [
-											{
-											"type": "image","""
-			block = block + '"image_url": "{0}",'.format(user_icon_url)
-			block = block + """"alt_text": "images"
-									}
-							]
-					}
-			]"""
-
-		else:
-			block = block + """[
-							{
-									"type": "divider"
-							},
-							{
-									"type": "context",
-									"elements": [
-											{
-											"type": "image","""
-			block = block + '"image_url": "{0}",'.format(user_icon_url)
-			block = block + """"alt_text": "images"
-									}
-							]
-					}
-			]"""
+		block = block +  '"text": "*#{0}*"'.format(channel_name)
+		block = block + """
+								}
+						}]
+		"""
 
 		payload = {
 			"channel": self.channel,
@@ -92,9 +59,6 @@ class SlackManager:
 			"unfurl_media": "true",
 			"blocks": block
 		}
-
-		if thread_ts:
-			payload['thread_ts'] = thread_ts
 
 		response = requests.post(method_url, payload)
 		return response
